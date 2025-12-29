@@ -11,9 +11,9 @@ class ItemController extends Controller
     // GET /api/items
     public function index()
     {
-        return response()->json(
-            Item::where('is_active', true)->get()
-        );
+        return response()->json([
+            "items" => Item::where('is_active', true)->get()
+        ]);
     }
 
     // POST /api/items

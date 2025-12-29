@@ -12,7 +12,8 @@ class OrderItem extends Model
     'estimated_quantity',
     'actual_quantity',
     'price',
-    'points_earned'
+    'points_earned',
+    'image'
 ];
 
 

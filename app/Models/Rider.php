@@ -1,13 +1,13 @@
 <?php
-
 namespace App\Models;
-use Laravel\Sanctum\HasApiTokens;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Rider extends Authenticatable
 {
-    use HasApiTokens,Notifiable;
+    use HasApiTokens, HasFactory;
 
     protected $fillable = [
         'name',
@@ -21,7 +21,6 @@ class Rider extends Authenticatable
         'password'
     ];
 
-    // العلاقة مع الطلبات
     public function orders()
     {
         return $this->hasMany(Order::class);
