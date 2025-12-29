@@ -19,9 +19,7 @@ class RiderController extends Controller
     {
         $rider = Auth::guard('rider')->user();
 
-        $orders = Order::where('status', ['pending', 'assigned', 'collected', 'delivered'])
-            ->whereNull('rider_id')
-            ->with(['items.item', 'user'])
+        $orders = Order::with(['items.item', 'user'])
             ->get();
 
         return response()->json($orders);
@@ -29,7 +27,7 @@ class RiderController extends Controller
 
     /**
      * قبول طلب
-     */
+     */ 
     public function acceptOrder($order_id)
     {
         $rider = Auth::guard('rider')->user();
