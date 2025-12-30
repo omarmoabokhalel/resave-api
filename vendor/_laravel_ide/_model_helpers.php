@@ -984,6 +984,8 @@ namespace App\Models {
     /**
      * App\Models\Rider
      *
+     * @property float $rating
+     * @property mixed $completed_orders
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property bool $is_available
@@ -1004,6 +1006,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider whereIsAvailable($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider whereCompletedOrders($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider whereRating($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Rider>|Rider query()
