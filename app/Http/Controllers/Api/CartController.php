@@ -31,6 +31,7 @@ class CartController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'message' => 'Cart has items',
             'data' => $order
         ], 200);
     }
@@ -142,7 +143,11 @@ class CartController extends Controller
         if (! $user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-
+        $validated = $request->validate([
+            'address' => 'required|string',
+            'latitude' => 'numeric|between:-90,90|nullable',
+            'longitude' => 'numeric|between:-180,180|nullable',
+        ]);
         $order = $user->orders()
             ->where('status', 'draft')
             ->with('items')
@@ -160,9 +165,13 @@ class CartController extends Controller
             'status' => 'pending',
             'total_quantity' => $totalQuantity,
             'scheduled_at' => now()->addDay(),
+            'address' => $validated['address'] ,
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
         ]);
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Order confirmed successfully',
             'order' => $order
         ]);

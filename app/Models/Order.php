@@ -12,7 +12,10 @@ class Order extends Model
         'status',
         'total_quantity',
         'total_points',
-        'scheduled_at'
+        'scheduled_at',
+        'address',
+        'latitude',
+        'longitude'
     ];
     public function items()
     {
