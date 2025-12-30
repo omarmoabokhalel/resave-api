@@ -13,7 +13,8 @@ class OrderItem extends Model
     'actual_quantity',
     'price',
     'points_earned',
-    'image'
+    'image',
+    'confirm_image'
 ];
 
 

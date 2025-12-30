@@ -659,6 +659,7 @@ namespace App\Models {
     /**
      * App\Models\OrderItem
      *
+     * @property string|null $confirm_image
      * @property string|null $image
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
@@ -681,6 +682,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem whereImage($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem whereConfirmImage($value)
      * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<OrderItem>|OrderItem query()

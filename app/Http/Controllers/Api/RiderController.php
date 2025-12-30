@@ -27,7 +27,7 @@ class RiderController extends Controller
 
     /**
      * قبول طلب
-     */ 
+     */
     public function acceptOrder($order_id)
     {
         $rider = Auth::guard('rider')->user();
@@ -70,51 +70,62 @@ class RiderController extends Controller
      * إدخال الوزن الفعلي
      */
     public function updateWeight(Request $request, $order_id)
-{
-    $rider = Auth::guard('rider')->user();
+    {
+        $rider = Auth::guard('rider')->user();
 
-    $data = $request->validate([
-        'items' => 'required|array',
-        'items.*.order_item_id'    => 'required|exists:order_items,id',
-        'items.*.actual_quantity' => 'required|numeric|min:0.1',
-    ]);
-
-    $order = Order::where('id', $order_id)
-        ->where('rider_id', $rider->id)
-        ->firstOrFail();
-
-    $totalQuantity = 0;
-    $totalPoints   = 0;
-
-    foreach ($data['items'] as $row) {
-
-        $orderItem = OrderItem::where('id', $row['order_item_id'])
-            ->where('order_id', $order->id)
-            ->firstOrFail();
-
-        // ✅ حساب النقاط = الكمية × سعر المنتج
-        $points = round($row['actual_quantity'] * $orderItem->price);
-
-        $orderItem->update([
-            'actual_quantity' => $row['actual_quantity'],
-            'points_earned'   => $points,
+        $data = $request->validate([
+            'items' => 'required|array',
+            'items.*.order_item_id'    => 'required|exists:order_items,id',
+            'items.*.actual_quantity' => 'required|numeric|min:0.1',
+            'items.*.confirm_image'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $totalQuantity += $row['actual_quantity'];
-        $totalPoints   += $points;
+        $order = Order::where('id', $order_id)
+            ->where('rider_id', $rider->id)
+            ->firstOrFail();
+
+        $totalQuantity = 0;
+        $totalPoints   = 0;
+
+        foreach ($data['items'] as $index => $row) {
+
+            $orderItem = OrderItem::where('id', $row['order_item_id'])
+                ->where('order_id', $order->id)
+                ->firstOrFail();
+
+            // 📸 رفع صورة التأكيد (لو موجودة)
+            $imagePath = null;
+            if ($request->hasFile("items.$index.confirm_image")) {
+                $imagePath = $request
+                    ->file("items.$index.confirm_image")
+                    ->store('order_confirm_images', 'public');
+            }
+
+            // ✅ النقاط = الكمية × سعر المنتج
+            $points = round($row['actual_quantity'] * $orderItem->price);
+
+            $orderItem->update([
+                'actual_quantity' => $row['actual_quantity'],
+                'points_earned'   => $points,
+                'confirm_image'   => $imagePath,
+            ]);
+
+            $totalQuantity += $row['actual_quantity'];
+            $totalPoints   += $points;
+        }
+
+        $order->update([
+            'total_quantity' => $totalQuantity,
+            'total_points'   => $totalPoints,
+            'status'         => 'collected',
+        ]);
+
+        return response()->json([
+            'message' => 'تم تسجيل الوزن والصور بنجاح',
+            'order'   => $order
+        ]);
     }
 
-    $order->update([
-        'total_quantity' => $totalQuantity,
-        'total_points'   => $totalPoints,
-        'status'         => 'collected',
-    ]);
-
-    return response()->json([
-        'message' => 'تم تسجيل الوزن بنجاح',
-        'order'   => $order
-    ]);
-}
 
 
     /**
